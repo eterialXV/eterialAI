@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ETERIAL AI</title>
     <style>
-        /* Общие стили для черно-белой эстетики */
         * {
             margin: 0;
             padding: 0;
@@ -21,7 +20,6 @@
             overflow: hidden;
         }
 
-        /* 1. ЭКРАН ПРЕВЬЮ (ГЛАВНАЯ) */
         .preview-screen {
             position: fixed;
             top: 0;
@@ -71,7 +69,6 @@
             box-shadow: 0 0 15px rgba(255, 255, 255, 0.7);
         }
 
-        /* 2. ИНТЕРФЕЙС ЧАТА */
         .chat-screen {
             display: flex;
             flex-direction: column;
@@ -89,7 +86,6 @@
             opacity: 1;
         }
 
-        /* Шапка чата */
         .chat-header {
             padding: 20px;
             text-align: center;
@@ -99,7 +95,6 @@
             color: #888;
         }
 
-        /* Окно с сообщениями */
         .messages-container {
             flex: 1;
             overflow-y: auto;
@@ -109,7 +104,6 @@
             gap: 15px;
         }
 
-        /* Скроллбар */
         .messages-container::-webkit-scrollbar {
             width: 4px;
         }
@@ -117,7 +111,6 @@
             background: #333;
         }
 
-        /* Стили сообщений */
         .message {
             max-width: 80%;
             padding: 12px 16px;
@@ -139,7 +132,6 @@
             border-radius: 4px 4px 4px 0;
         }
 
-        /* Зона ввода */
         .input-container {
             display: flex;
             padding: 20px;
@@ -177,7 +169,6 @@
             background: #ccc;
         }
 
-        /* Простая анимация появления */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(-10px); }
             to { opacity: 1; transform: translateY(0); }
@@ -186,18 +177,14 @@
 </head>
 <body>
 
-    <!-- Экран превью -->
     <div class="preview-screen" id="previewScreen">
         <h1 class="brand-title">ETERIAL</h1>
         <button class="start-btn" id="startBtn">Начать чат</button>
     </div>
 
-    <!-- Экран чата -->
     <div class="chat-screen" id="chatScreen">
-        <div class="chat-header">ETERIAL SYSTEM v1.0</div>
-        <div class="messages-container" id="messagesContainer">
-            <!-- Здесь будут появляться сообщения -->
-        </div>
+        <div class="chat-header">ETERIAL SYSTEM v1.1</div>
+        <div class="messages-container" id="messagesContainer"></div>
         <div class="input-container">
             <input type="text" class="chat-input" id="chatInput" placeholder="Введите сообщение..." autocomplete="off">
             <button class="send-btn" id="sendBtn">></button>
@@ -212,41 +199,49 @@
         const chatInput = document.getElementById('chatInput');
         const sendBtn = document.getElementById('sendBtn');
 
-        // Переход от превью к чату
         startBtn.addEventListener('click', () => {
             previewScreen.classList.add('hidden');
             chatScreen.classList.add('visible');
             
-            // Приветственное сообщение от ИИ через секунду после входа
             setTimeout(() => {
-                addMessage("Приветствую. Я ETERIAL. Задавай свои вопросы.", 'ai');
+                addMessage("Приветствую. Я ETERIAL v1.1. Система готова к вычислениям и диалогу.", 'ai');
             }, 1000);
         });
 
-        // Функция добавления сообщений на экран
         function addMessage(text, sender) {
             const messageDiv = document.createElement('div');
             messageDiv.classList.add('message', sender);
             messageDiv.innerText = text;
             messagesContainer.appendChild(messageDiv);
-            
-            // Автопрокрутка вниз при новом сообщении
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
         }
 
-        // Логика ответов ИИ (базовая база данных ответов)
+        // Умный обработчик ответов ИИ
         function getAIResponse(userText) {
             const text = userText.toLowerCase().trim();
 
-            // Простые правила триггеров
-            if (text.includes('привет') || text.includes('здравствуй')) {
+            // 1. Блок автоматических математических вычислений
+            // Удаляем знак вопроса, пробелы и проверяем, есть ли математические знаки
+            const mathClean = text.replace('?', '').replace(/ /g, '');
+            if (/^[0-9+\-*/().]+$/.test(mathClean)) {
+                try {
+                    // Безопасно вычисляем простое выражение на JS
+                    const result = Function(`return (${mathClean})`)();
+                    return `Результат вычисления: ${result}`;
+                } catch (e) {
+                    return "Ошибка в математическом выражении. Проверь знаки.";
+                }
+            }
+
+            // 2. Блок текстовых диалогов
+            if (text.includes('привет') || text.includes('здравствуй') || text.includes('ку')) {
                 return "Привет. Система активна и готова к работе.";
             }
             if (text.includes('как дела') || text.includes('ты как')) {
                 return "Мои процессы оптимизированы. Функционирую в штатном режиме. Как твои дела?";
             }
             if (text.includes('что ты умеешь') || text.includes('твои функции')) {
-                return "Я могу поддерживать базовый текстовый диалог, вычислять простые запросы и отражать твою минималистичную эстетику.";
+                return "Я умею мгновенно считать математические примеры (просто напиши мне что-то вроде 2+2 или 15*3), а также поддерживать базовую беседу.";
             }
             if (text.includes('кто тебя создал') || text.includes('автор')) {
                 return "Я — проект ETERIAL, созданный совместными усилиями человека и ИИ.";
@@ -255,35 +250,27 @@
                 return "Сессия завершается. Возвращайся, когда потребуется.";
             }
             
-            // Ответ по умолчанию, если ИИ не понял фразу
-            return "Запрос принят к сведению. Моя база знаний находится в стадии расширения, но я запомню это фразу.";
+            return "Запрос принят к сведению. Моя база знаний находится в стадии расширения, но я умею считать математику и отвечать на приветствия.";
         }
 
-        // Обработка отправки сообщения
         function handleSend() {
             const userText = chatInput.value;
-            if (!userText.trim()) return; // Не отправлять пустоту
+            if (!userText.trim()) return;
 
-            // 1. Отображаем сообщение пользователя
             addMessage(userText, 'user');
-            chatInput.value = ''; // Очищаем поле ввода
+            chatInput.value = '';
 
-            // 2. Имитируем небольшую задержку "мысли" ИИ и отвечаем
             setTimeout(() => {
                 const aiAnswer = getAIResponse(userText);
                 addMessage(aiAnswer, 'ai');
             }, 600);
         }
 
-        // Клик по кнопке отправки
         sendBtn.addEventListener('click', handleSend);
-
-        // Отправка по нажатию Enter
         chatInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                handleSend();
-            }
+            if (e.key === 'Enter') handleSend();
         });
     </script>
 </body>
 </html>
+
