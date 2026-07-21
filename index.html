@@ -1,288 +1,193 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ETERIAL AI</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Courier New', Courier, monospace;
-        }
-
-        body, html {
-            width: 100%;
-            height: 100%;
-            background-color: #000000;
-            color: #ffffff;
-            overflow: hidden;
-        }
-
-        .preview-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            background: radial-gradient(circle, #111 0%, #000 100%);
-            z-index: 10;
-            transition: opacity 0.8s ease, transform 0.8s ease;
-        }
-
-        .preview-screen.hidden {
-            opacity: 0;
-            transform: scale(1.05);
-            pointer-events: none;
-        }
-
-        .brand-title {
-            font-size: 5rem;
-            letter-spacing: 0.8rem;
-            font-weight: 900;
-            text-transform: uppercase;
-            margin-bottom: 2rem;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
-            animation: fadeIn 2s ease;
-        }
-
-        .start-btn {
-            background: transparent;
-            color: #ffffff;
-            border: 1px solid #ffffff;
-            padding: 12px 30px;
-            font-size: 1rem;
-            cursor: pointer;
-            text-transform: uppercase;
-            letter-spacing: 0.2rem;
-            transition: all 0.3s ease;
-        }
-
-        .start-btn:hover {
-            background: #ffffff;
-            color: #000000;
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.7);
-        }
-
-        .chat-screen {
-            display: flex;
-            flex-direction: column;
-            width: 100%;
-            height: 100%;
-            max-width: 800px;
-            margin: 0 auto;
-            border-left: 1px solid #222;
-            border-right: 1px solid #222;
-            opacity: 0;
-            transition: opacity 0.5s ease 0.5s;
-        }
-
-        .chat-screen.visible {
-            opacity: 1;
-        }
-
-        .chat-header {
-            padding: 20px;
-            text-align: center;
-            border-bottom: 1px solid #222;
-            font-size: 1.2rem;
-            letter-spacing: 0.3rem;
-            color: #ffffff;
-            text-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
-        }
-
-        .messages-container {
-            flex: 1;
-            overflow-y: auto;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .messages-container::-webkit-scrollbar {
-            width: 4px;
-        }
-        .messages-container::-webkit-scrollbar-thumb {
-            background: #333;
-        }
-
-        .message {
-            max-width: 80%;
-            padding: 12px 16px;
-            line-height: 1.4;
-            word-wrap: break-word;
-            white-space: pre-wrap; /* Исправляет склеивание пробелов и слов */
-        }
-
-        .message.user {
-            align-self: flex-end;
-            background-color: #ffffff;
-            color: #000000;
-            border-radius: 4px 4px 0 4px;
-        }
-
-        .message.ai {
-            align-self: flex-start;
-            border: 1px solid #333;
-            color: #ffffff;
-            border-radius: 4px 4px 4px 0;
-        }
-
-        .input-container {
-            display: flex;
-            padding: 20px;
-            border-top: 1px solid #222;
-            background: #000;
-        }
-
-        .chat-input {
-            flex: 1;
-            background: transparent;
-            border: 1px solid #333;
-            color: #fff;
-            padding: 12px;
-            font-size: 1rem;
-            outline: none;
-            transition: border-color 0.3s;
-        }
-
-        .chat-input:focus {
-            border-color: #666;
-        }
-
-        .send-btn {
-            background: #fff;
-            border: none;
-            color: #000;
-            padding: 0 20px;
-            margin-left: 10px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: background 0.3s;
-        }
-
-        .send-btn:hover {
-            background: #ccc;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chat</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #121212;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      margin: 0;
+      overflow: hidden;
+    }
+    #loader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #121212;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      transition: opacity 0.5s ease, visibility 0.5s;
+    }
+    #loader.hidden {
+      opacity: 0;
+      visibility: hidden;
+    }
+    .arevakhach {
+      width: 80px;
+      height: 80px;
+      animation: spin 2s linear infinite;
+    }
+    @keyframes spin {
+      100% { transform: rotate(360deg); }
+    }
+    #chat {
+      flex: 1;
+      overflow-y: auto;
+      padding: 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .msg {
+      max-width: 80%;
+      padding: 10px 14px;
+      border-radius: 8px;
+      line-height: 1.4;
+      white-space: pre-wrap;
+    }
+    .user {
+      align-self: flex-end;
+      background: #2b5278;
+    }
+    .bot {
+      align-self: flex-start;
+      background: #212121;
+    }
+    #form {
+      display: flex;
+      padding: 10px;
+      background: #1e1e1e;
+    }
+    #input {
+      flex: 1;
+      padding: 12px;
+      border: none;
+      border-radius: 6px;
+      background: #2a2a2a;
+      color: #fff;
+      outline: none;
+    }
+    button {
+      margin-left: 8px;
+      padding: 12px 18px;
+      border: none;
+      border-radius: 6px;
+      background: #0088cc;
+      color: #fff;
+      cursor: pointer;
+    }
+    #clear-btn {
+      background: #4a2525;
+    }
+  </style>
 </head>
 <body>
 
-    <div class="preview-screen" id="previewScreen">
-        <h1 class="brand-title">ETERIAL</h1>
-        <button class="start-btn" id="startBtn">Начать чат</button>
-    </div>
+  <div id="loader">
+    <svg class="arevakhach" viewBox="0 0 100 100" fill="none" stroke="#0088cc" stroke-width="4" stroke-linecap="round">
+      <circle cx="50" cy="50" r="8" fill="#0088cc" />
+      <path d="M 50 42 A 20 20 0 0 1 70 50" />
+      <path d="M 58 50 A 20 20 0 0 1 50 70" />
+      <path d="M 50 58 A 20 20 0 0 1 30 50" />
+      <path d="M 42 50 A 20 20 0 0 1 50 30" />
+      <path d="M 50 30 A 35 35 0 0 1 85 50" />
+      <path d="M 70 50 A 35 35 0 0 1 50 85" />
+      <path d="M 50 70 A 35 35 0 0 1 15 50" />
+      <path d="M 30 50 A 35 35 0 0 1 50 15" />
+    </svg>
+  </div>
 
-    <div class="chat-screen" id="chatScreen">
-        <div class="chat-header">ETERIAL SYSTEM</div>
-        <div class="messages-container" id="messagesContainer"></div>
-        <div class="input-container">
-            <input type="text" class="chat-input" id="chatInput" placeholder="Введите сообщение..." autocomplete="off">
-            <button class="send-btn" id="sendBtn">></button>
-        </div>
-    </div>
+  <div id="chat"></div>
 
-    <script>
-        // Твоя рабочая ссылка на Cloudflare Воркер уже прописана здесь:
-        const WORKER_URL = "https://spring-fire-e91b.zxcverz627.workers.dev"; 
+  <form id="form">
+    <button type="button" id="clear-btn" title="Очистить историю">✕</button>
+    <input type="text" id="input" placeholder="Введите сообщение..." required autocomplete="off">
+    <button type="submit">Отправить</button>
+  </form>
 
-        const previewScreen = document.getElementById('previewScreen');
-        const chatScreen = document.getElementById('chatScreen');
-        const startBtn = document.getElementById('startBtn');
-        const messagesContainer = document.getElementById('messagesContainer');
-        const chatInput = document.getElementById('chatInput');
-        const sendBtn = document.getElementById('sendBtn');
+  <script>
+    const WORKER_URL = "https://твой-worker.workers.dev";
 
-        startBtn.addEventListener('click', () => {
-            previewScreen.classList.add('hidden');
-            chatScreen.classList.add('visible');
-            
-            setTimeout(() => {
-                typeEffect("Приветствую. Я ETERIAL. Мой искусственный интеллект инициализирован. Задай мне любой вопрос.", 'ai');
-            }, 1000);
+    const chat = document.getElementById("chat");
+    const form = document.getElementById("form");
+    const input = document.getElementById("input");
+    const loader = document.getElementById("loader");
+    const clearBtn = document.getElementById("clear-btn");
+
+    let history = JSON.parse(localStorage.getItem("chat_history") || "[]");
+
+    window.addEventListener("load", () => {
+      setTimeout(() => {
+        loader.classList.add("hidden");
+      }, 2000);
+      renderHistory();
+    });
+
+    function saveHistory() {
+      localStorage.setItem("chat_history", JSON.stringify(history));
+    }
+
+    function renderHistory() {
+      chat.innerHTML = "";
+      history.forEach(item => {
+        appendMessageUI(item.text, item.cls);
+      });
+    }
+
+    function appendMessageUI(text, cls) {
+      const div = document.createElement("div");
+      div.className = `msg ${cls}`;
+      div.textContent = text;
+      chat.appendChild(div);
+      chat.scrollTop = chat.scrollHeight;
+      return div;
+    }
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const text = input.value.trim();
+      if (!text) return;
+
+      appendMessageUI(text, "user");
+      history.push({ text, cls: "user" });
+      saveHistory();
+
+      input.value = "";
+
+      const botMsg = appendMessageUI("Печатает...", "bot");
+
+      try {
+        const res = await fetch(WORKER_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ text })
         });
+        const data = await res.json();
+        const reply = data.reply || "Ошибка получения ответа";
+        
+        botMsg.textContent = reply;
+        history.push({ text: reply, cls: "bot" });
+        saveHistory();
+      } catch (err) {
+        botMsg.textContent = "Ошибка соединения";
+      }
+    });
 
-        function addMessage(text, sender) {
-            const messageDiv = document.createElement('div');
-            messageDiv.classList.add('message', sender);
-            messageDiv.innerText = text;
-            messagesContainer.appendChild(messageDiv);
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
-            return messageDiv;
-        }
-
-        function typeEffect(text, sender) {
-            const messageDiv = addMessage("", sender);
-            let i = 0;
-            function type() {
-                if (i < text.length) {
-                    messageDiv.innerText += text.charAt(i);
-                    i++;
-                    messagesContainer.scrollTop = messagesContainer.scrollHeight;
-                    setTimeout(type, 20);
-                }
-            }
-            type();
-        }
-
-        async function fetchAIResponse(userText) {
-            const text = userText.toLowerCase().trim();
-
-            // Перехват кастомных фраз про автора
-            if (text.includes('создатель') || text.includes('автор') || text.includes('кто тебя создал') || text.includes('разработчик')) {
-                return "Мой величайший создатель @gaferov (TELEGRAM)";
-            }
-
-            try {
-                const response = await fetch(WORKER_URL, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({ text: userText })
-                });
-
-                const data = await response.json();
-                
-                if (data.reply) {
-                    return data.reply;
-                } else {
-                    return "Ошибка: Сервер ИИ вернул пустой ответ. Проверь настройки API-ключа внутри Cloudflare Worker.";
-                }
-            } catch (error) {
-                console.error(error);
-                return "Ошибка: Не удалось связаться с мыслительным облаком Cloudflare. Убедись, что Воркер активен.";
-            }
-        }
-
-        async function handleSend() {
-            const userText = chatInput.value;
-            if (!userText.trim()) return;
-
-            addMessage(userText, 'user');
-            chatInput.value = '';
-
-            setTimeout(async () => {
-                const aiAnswer = await fetchAIResponse(userText);
-                typeEffect(aiAnswer, 'ai');
-            }, 500);
-        }
-
-        sendBtn.addEventListener('click', handleSend);
-        chatInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') handleSend();
-        });
-    </script>
+    clearBtn.addEventListener("click", () => {
+      history = [];
+      localStorage.removeItem("chat_history");
+      chat.innerHTML = "";
+    });
+  </script>
 </body>
 </html>
