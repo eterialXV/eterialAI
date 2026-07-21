@@ -14,15 +14,14 @@
       width: 100%;
       height: 100%;
       height: 100dvh;
-      background: #0a0a0a;
-      color: #fff;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #000000;
+      color: #ffffff;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, monospace, sans-serif;
       display: flex;
       flex-direction: column;
       overflow: hidden;
     }
 
-    /* --- СТАРТОВЫЙ ЭКРАН (SPLASH SCREEN) --- */
     #welcome-screen {
       position: fixed;
       top: 0;
@@ -30,7 +29,7 @@
       width: 100%;
       height: 100%;
       height: 100dvh;
-      background: radial-gradient(circle at center, #181818 0%, #080808 100%);
+      background: #000000;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -53,53 +52,51 @@
       color: #ffffff;
       text-transform: uppercase;
       margin-bottom: 40px;
-      text-shadow: 0 0 10px rgba(255, 255, 255, 0.8),
-                   0 0 20px rgba(255, 255, 255, 0.4),
-                   0 0 30px rgba(255, 255, 255, 0.2);
-      animation: pulse 3s infinite alternate;
+      text-shadow: 0 0 10px #ffffff,
+                   0 0 20px #ffffff,
+                   0 0 40px rgba(255, 255, 255, 0.6);
+      animation: neonPulse 2s infinite alternate;
       text-align: center;
-      padding-left: 12px; /* баланс из-за letter-spacing */
+      padding-left: 12px;
     }
 
-    @keyframes pulse {
+    @keyframes neonPulse {
       0% {
-        text-shadow: 0 0 8px rgba(255, 255, 255, 0.7),
-                     0 0 15px rgba(255, 255, 255, 0.3);
+        text-shadow: 0 0 8px #ffffff, 0 0 15px rgba(255, 255, 255, 0.5);
       }
       100% {
-        text-shadow: 0 0 15px rgba(255, 255, 255, 1),
-                     0 0 30px rgba(255, 255, 255, 0.6),
-                     0 0 45px rgba(255, 255, 255, 0.3);
+        text-shadow: 0 0 15px #ffffff, 0 0 30px #ffffff, 0 0 50px rgba(255, 255, 255, 0.8);
       }
     }
 
     .start-btn {
       background: transparent;
-      border: 1px solid rgba(255, 255, 255, 0.8);
-      color: #fff;
+      border: 1px solid #ffffff;
+      color: #ffffff;
       padding: 12px 28px;
       font-family: 'Courier New', Courier, monospace;
       font-size: 13px;
       letter-spacing: 4px;
       text-transform: uppercase;
       cursor: pointer;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
       transition: all 0.3s ease;
     }
 
     .start-btn:hover, .start-btn:active {
       background: #ffffff;
       color: #000000;
-      box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+      box-shadow: 0 0 20px #ffffff;
     }
 
-    /* --- ОСНОВНОЙ ИНТЕРФЕЙС ЧАТА --- */
     #header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding: 12px 16px;
-      background: #1e1e1e;
-      border-bottom: 1px solid #2a2a2a;
+      background: #050505;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 2px 10px rgba(255, 255, 255, 0.05);
       flex-shrink: 0;
     }
 
@@ -110,18 +107,26 @@
     }
 
     .logo {
-      font-weight: 700;
+      font-weight: 800;
       font-size: 18px;
-      letter-spacing: 0.5px;
+      letter-spacing: 2px;
       color: #fff;
+      text-transform: uppercase;
+      text-shadow: 0 0 8px rgba(255, 255, 255, 0.7);
     }
 
     .nav-btn {
-      color: #0088cc;
+      color: #888888;
       text-decoration: none;
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 500;
       cursor: pointer;
+      transition: color 0.2s ease, text-shadow 0.2s ease;
+    }
+
+    .nav-btn:hover {
+      color: #ffffff;
+      text-shadow: 0 0 5px #ffffff;
     }
 
     .user-section {
@@ -131,14 +136,15 @@
     }
 
     #user-info {
-      font-size: 14px;
-      color: #aaa;
+      font-size: 13px;
+      color: #888;
+      letter-spacing: 1px;
     }
 
     .header-btn {
-      background: #2b5278;
+      background: transparent;
       color: #fff;
-      border: none;
+      border: 1px solid rgba(255, 255, 255, 0.5);
       border-radius: 4px;
       width: 30px;
       height: 30px;
@@ -147,6 +153,15 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      box-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
+      transition: all 0.2s ease;
+    }
+
+    .header-btn:hover {
+      border-color: #ffffff;
+      box-shadow: 0 0 10px #ffffff;
+      background: #ffffff;
+      color: #000000;
     }
 
     #chat {
@@ -155,69 +170,91 @@
       padding: 15px;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 12px;
+      background: #000000;
     }
 
     .msg {
       max-width: 85%;
       padding: 10px 14px;
-      border-radius: 12px;
+      border-radius: 10px;
       line-height: 1.4;
       white-space: pre-wrap;
       word-break: break-word;
+      font-size: 14px;
     }
 
     .user {
       align-self: flex-end;
-      background: #2b5278;
+      background: #111111;
+      color: #ffffff;
+      border: 1px solid #ffffff;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
     }
 
     .bot {
       align-self: flex-start;
-      background: #212121;
+      background: #050505;
+      color: #cccccc;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      box-shadow: 0 0 5px rgba(255, 255, 255, 0.1);
     }
 
     #form {
       display: flex;
       padding: 10px 12px;
-      background: #1e1e1e;
-      border-top: 1px solid #2a2a2a;
+      background: #050505;
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
       flex-shrink: 0;
     }
 
     #input {
       flex: 1;
       padding: 12px 14px;
-      border: none;
+      border: 1px solid rgba(255, 255, 255, 0.3);
       border-radius: 8px;
-      background: #2a2a2a;
+      background: #0a0a0a;
       color: #fff;
       font-size: 16px;
       outline: none;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    #input:focus {
+      border-color: #ffffff;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
     }
 
     button[type="submit"] {
       margin-left: 8px;
       padding: 12px 16px;
-      border: none;
+      border: 1px solid #ffffff;
       border-radius: 8px;
-      background: #0088cc;
+      background: transparent;
       color: #fff;
       font-weight: bold;
-      font-size: 15px;
+      font-size: 14px;
       cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      box-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
+      transition: all 0.2s ease;
+    }
+
+    button[type="submit"]:hover, button[type="submit"]:active {
+      background: #ffffff;
+      color: #000000;
+      box-shadow: 0 0 15px #ffffff;
     }
   </style>
 </head>
 <body>
 
-  <!-- Экран приветствия -->
   <div id="welcome-screen">
     <div class="glow-title">ETHERIAL</div>
     <button type="button" class="start-btn" id="start-btn">НАЧАТЬ ЧАТ</button>
   </div>
 
-  <!-- Шапка -->
   <div id="header">
     <div class="brand-section">
       <span class="logo">Eterial</span>
@@ -225,16 +262,14 @@
     </div>
     <div class="user-section">
       <span id="user-info">Гость</span>
-      <button type="button" class="header-btn" id="auth-btn" title="Добавить ник">+</button>
+      <button type="button" class="header-btn" id="auth-btn">+</button>
     </div>
   </div>
 
-  <!-- Окно сообщений -->
   <div id="chat"></div>
 
-  <!-- Форма ввода -->
   <form id="form">
-    <input type="text" id="input" placeholder="Введите сообщение..." required autocomplete="off">
+    <input type="text" id="input" required autocomplete="off">
     <button type="submit">Отправить</button>
   </form>
 
@@ -253,7 +288,6 @@
 
     let username = localStorage.getItem("chat_username") || "Гость";
 
-    // Переход с приветственного экрана к чату
     startBtn.addEventListener("click", () => {
       welcomeScreen.classList.add("hidden");
       setTimeout(() => input.focus(), 600);
@@ -270,7 +304,7 @@
     });
 
     authBtn.addEventListener("click", () => {
-      const name = prompt("Введите ваш ник:", username !== "Гость" ? username : "");
+      const name = prompt("", username !== "Гость" ? username : "");
       if (name && name.trim()) {
         username = name.trim();
         localStorage.setItem("chat_username", username);
@@ -295,7 +329,7 @@
       addMessage(text, "user");
       input.value = "";
 
-      const botMsg = addMessage("Печатает...", "bot");
+      const botMsg = addMessage("...", "bot");
 
       try {
         const res = await fetch(WORKER_URL, {
